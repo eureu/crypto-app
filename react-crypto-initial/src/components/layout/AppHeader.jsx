@@ -1,16 +1,74 @@
-import { Layout } from "antd";
+import { Layout, Select, Space, Button } from "antd";
+import { useCrypto } from "../../context/crypto-context.jsx";
 
 const headerStyle = {
-  textAlign: 'center',
-  color: '#fff',
+  width: "100%",
+  textAlign: "center",
+  // color: "#fff",
   height: 60,
-  paddingInline: 48,
-  lineHeight: '64px',
-  backgroundColor: '#4096ff',
+  padding: "1rem",
+  // paddingInline: 48,
+  // lineHeight: "64px",
+  // backgroundColor: "#4096ff",
+  display: "flex",
+  // background: "white",
+  justifyContent: "space-between",
+  alignItems: "center"
 };
 
+const handleChange = (value) => {
+  console.log(`selected ${value}`);
+};
+
+const options = [
+  {
+    label: "China",
+    value: "china",
+    emoji: "🇨🇳",
+    desc: "China (中国)"
+  },
+  {
+    label: "USA",
+    value: "usa",
+    emoji: "🇺🇸",
+    desc: "USA (美国)"
+  },
+  {
+    label: "Japan",
+    value: "japan",
+    emoji: "🇯🇵",
+    desc: "Japan (日本)"
+  },
+  {
+    label: "Korea",
+    value: "korea",
+    emoji: "🇰🇷",
+    desc: "Korea (韩国)"
+  }
+];
+
 export default function AppHeader() {
+  const { crypto } = useCrypto();
+
   return (
-    <Layout.Header style={headerStyle}>Header</Layout.Header>
-  )
+    <Layout.Header style={headerStyle}>
+      <Select
+        style={{
+          width: 250
+        }}
+        value="press / to open"
+        options={crypto.map((coin) => ({
+          label: coin.name,
+          value: coin.id,
+          icon: coin.icon
+        }))}
+        optionRender={(option) => (
+          <Space>
+            <img /> {crypto.label}
+          </Space>
+        )}
+      />
+      <Button type="primary">Add Asset</Button>
+    </Layout.Header>
+  );
 }
