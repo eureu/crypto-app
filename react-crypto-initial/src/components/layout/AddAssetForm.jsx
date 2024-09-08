@@ -8,14 +8,32 @@ import {
   Form,
   InputNumber,
   Button,
-  DatePicker
+  DatePicker,
+  Result
 } from "antd";
 import { useCrypto } from "../../context/crypto-context";
+import CoinInfo from "./CoinInfo.jsx";
 
-export default function AddAssetForm() {
+export default function AddAssetForm({ onClose }) {
   const { crypto } = useCrypto();
   const [coin, setCoin] = useState(null);
   const [form] = Form.useForm();
+  const [submitted, setSubmitted] = useState(false);
+
+  if (submitted) {
+    return (
+      <Result
+        status="success"
+        title="Successfully added new asset"
+        subTitle={`${42} of ${coin.name} buyed by price ${24}`}
+        extra={[
+          <Button type="primary" key="console" onClick={onClose}>
+            Close
+          </Button>
+        ]}
+      />
+    );
+  }
 
   if (!coin) {
     return (
@@ -44,6 +62,7 @@ export default function AddAssetForm() {
 
   function onFinish(values) {
     console.log("finish", values);
+    setSubmitted(true);
   }
 
   const validateMessages = {
@@ -80,16 +99,7 @@ export default function AddAssetForm() {
         width: "100%"
       }}
     >
-      <Flex>
-        <img
-          src={coin.icon}
-          alt={coin.name}
-          style={{ width: 40, marginRight: 10 }}
-        ></img>
-        <Typography.Title level={2} style={{ margin: 0 }}>
-          {coin.name}
-        </Typography.Title>
-      </Flex>
+      <CoinInfo coin={coin} />
       <Divider />
       <Form.Item
         label="Amount"
