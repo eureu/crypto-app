@@ -15,7 +15,7 @@ import { useCrypto } from "../../context/crypto-context";
 import CoinInfo from "./CoinInfo.jsx";
 
 export default function AddAssetForm({ onClose }) {
-  const { crypto } = useCrypto();
+  const { crypto, addAsset } = useCrypto();
   const [coin, setCoin] = useState(null);
   const [form] = Form.useForm();
   const [submitted, setSubmitted] = useState(false);
@@ -26,7 +26,7 @@ export default function AddAssetForm({ onClose }) {
       <Result
         status="success"
         title="Successfully added new asset"
-        subTitle={`${assetRef.current.amount} ${coin.name} buyed by price ${assetRef.current.price}$`}
+        subTitle={`Added ${assetRef.current.amount} ${coin.name} buyed by price ${assetRef.current.price}$`}
         extra={[
           <Button type="primary" key="console" onClick={onClose}>
             Close
@@ -71,6 +71,7 @@ export default function AddAssetForm({ onClose }) {
     };
     setSubmitted(true);
     assetRef.current = newAsset;
+    addAsset(newAsset);
   }
 
   const validateMessages = {
