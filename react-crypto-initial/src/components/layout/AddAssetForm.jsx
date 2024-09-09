@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Select,
   Space,
@@ -19,13 +19,14 @@ export default function AddAssetForm({ onClose }) {
   const [coin, setCoin] = useState(null);
   const [form] = Form.useForm();
   const [submitted, setSubmitted] = useState(false);
+  const assetRef = useRef();
 
   if (submitted) {
     return (
       <Result
         status="success"
         title="Successfully added new asset"
-        subTitle={`${42} of ${coin.name} buyed by price ${24}`}
+        subTitle={`${assetRef.current.amount} ${coin.name} buyed by price ${assetRef.current.price}$`}
         extra={[
           <Button type="primary" key="console" onClick={onClose}>
             Close
@@ -61,8 +62,15 @@ export default function AddAssetForm({ onClose }) {
   }
 
   function onFinish(values) {
-    console.log("finish", values);
+    console.log(values);
+    const newAsset = {
+      id: coin.id,
+      amount: values.amount,
+      price: values.price,
+      date: values.date?.$d ?? new Date()
+    };
     setSubmitted(true);
+    assetRef.current = newAsset;
   }
 
   const validateMessages = {
@@ -99,7 +107,7 @@ export default function AddAssetForm({ onClose }) {
         width: "100%"
       }}
     >
-      <CoinInfo coin={coin} />
+      <CoinInfo coin={coin} withSymbol={false} />
       <Divider />
       <Form.Item
         label="Amount"
